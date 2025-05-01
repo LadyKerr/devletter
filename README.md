@@ -1,72 +1,99 @@
-# Love Letter Generator for Devs 😍
+# UTM Link Tracker App
 
 ## Overview
-The **Love Letter Generator for Devs** is a fun and interactive tool that lets developers express their love (or sarcasm) for their favorite dev tools and concepts. Built with **Astro** for the frontend and powered by an AI agent for letter generation, this project combines creativity, humor, and tech to deliver a unique experience for developers.
+The **UTM Link Tracker App** is a practical tool for marketers and developers to generate, manage, and track UTM parameters for their campaigns. Built with **Astro**, it provides a sleek and user-friendly interface for creating and organizing trackable links, all in one place.
 
 ## Features
-- **Pick a Dev Concept:**
-  Users can select from a list of popular development tools and concepts (e.g., Git, JavaScript, Copilot) or input a custom one.
-- **Customizable Tone:**
-  Choose between "Romantic," "Platonic," or "Sarcastic" tones for the generated love letter.
-- **Beautiful Display:**
-  Astro renders the love letter with animations like a typewriter effect for a dramatic touch.
-- **Share Options:**
-  Quickly copy the letter or share it on social media platforms like Twitter.
-- **Easter Egg Mode:**
-  A hidden "Random Mode" generates love letters for obscure or unexpected dev concepts (think "404 Errors" or "Semicolons").
+- **UTM Link Generator:**
+  - Input fields for URL, source, medium, campaign, term, and content.
+  - Automatically generate trackable UTM links with a copy-to-clipboard button.
+
+- **Link Management:**
+  - Save and organize UTM links in a dashboard.
+  - Search and filter links by campaign, source, or date.
+
+- **Basic Analytics:**
+  - Integrate with Google Analytics or use mock data to display basic performance stats.
+  - Visualize clicks by source, medium, or campaign using charts (e.g., bar or pie charts).
+
+- **Export Options:**
+  - Export saved UTM links as a CSV file.
+
+- **Responsive UI:**
+  - Mobile-friendly design for easy access on the go.
 
 ## Tech Stack
-- **Frontend:** Astro for fast and dynamic static site generation.
-- **Agent Logic:** AI/LLM for generating witty and creative love letters.
-- **Styling:** TailwindCSS for sleek and responsive design.
+- **Frontend:** Astro for static site generation with modern UI components.
+- **Database:** LocalStorage for quick prototyping
+- **Backend (Optional):** A lightweight server (e.g., Node.js, Express) for interacting with analytics APIs.
+- **Styling:** TailwindCSS for a sleek, responsive design.
 
 ## File Structure
-The following is the proposed structure for the Astro project:
+Here’s the proposed file structure for the Astro project:
 ```plaintext
 src/
 ├── components/
-│   ├── LoveLetterForm.astro  (Form for selecting concepts and tone)
-│   ├── LoveLetterDisplay.astro (Displays the generated love letter)
-│   └── Footer.astro (Social sharing and credits)
+│   ├── UTMForm.astro         (Form for generating UTM links)
+│   ├── UTMList.astro         (Displays saved UTM links)
+│   ├── AnalyticsChart.astro  (Charts for UTM performance tracking)
+│   └── Footer.astro          (Footer with credits and links)
 ├── layouts/
 │   └── BaseLayout.astro
 ├── pages/
-│   ├── index.astro (Landing page with form and generator)
-│   └── about.astro (Optional: About the project)
+│   ├── index.astro           (Landing page with UTM generator)
+│   ├── dashboard.astro       (UTM link management dashboard)
+│   └── about.astro           (Optional: About the project)
 └── styles/
     └── global.css
 ```
 
 ## How It Works
-1. **Select a Concept:**
-   - Choose a dev tool or concept from the dropdown, or input your own.
-2. **Pick a Tone:**
-   - Select the tone of the letter: Romantic, Platonic, or Sarcastic.
-3. **Generate the Letter:**
-   - The agent writes a dramatic and witty love letter to the selected concept.
-4. **View and Share:**
-   - The love letter is beautifully displayed with animations. Copy or share it with your friends!
+1. **Generate UTM Links:**
+   - Input a URL and UTM parameters (source, medium, campaign, etc.).
+   - The app generates a formatted URL with the UTM parameters appended.
+
+2. **Manage Links:**
+   - Save the generated links in a dashboard for future reference.
+   - Filter and search links by campaigns or sources.
+
+3. **Track Performance:**
+   - Visualize basic analytics (e.g., clicks per source) using integrated or mock data.
+
+4. **Export Data:**
+   - Download all saved UTM links as a CSV file for offline use.
 
 ## Live Stream Build Plan
-Here's how the project will be built during the live stream:
+Here’s the step-by-step plan for building the app live:
 
-1. **Intro (10-15 min):** 
-   - Explain the project idea and what you'll build.
+1. **Intro (10-15 min):**
+   - Explain what UTM links are and why they’re essential for tracking marketing efforts.
+   - Present the project plan and features.
+
 2. **Astro Setup (10-15 min):**
-   - Create the Astro project and set up basic components and layouts.
-3. **Agent Integration (20 min):**
-   - Integrate the AI agent for generating love letters.
-4. **Frontend Polishing (15 min):**
-   - Add styles and animations to make the UI appealing.
-5. **Testing & Fun (15 min):**
-   - Generate love letters live, share them with the audience, and explore hidden features.
+   - Initialize the Astro project and create the basic file structure.
+   - Set up TailwindCSS for styling.
+
+3. **UTM Generator Form (20 min):**
+   - Build the form for inputting URLs and UTM parameters.
+   - Add logic to dynamically generate UTM links.
+
+4. **Dashboard Setup (20 min):**
+   - Create the dashboard page to display and manage saved UTM links.
+   - Integrate Supabase/Firebase to store and retrieve link data.
+
+5. **Optional: Analytics Integration (15+ min):**
+   - Add Google Analytics integration or mock data for link performance tracking.
+
+6. **Testing & Wrap-Up (15 min):**
+   - Test the app live by generating and saving links.
+   - Demonstrate the analytics and export functionality.
 
 ## Future Enhancements
-- Add support for more tones (e.g., "Heartbroken," "Obsessive").
-- Allow users to upload custom images or icons to personalize the letter.
-- Enable saving generated letters as PDFs.
-- Introduce localization for love letters in different languages.
+- Add user authentication for personalized dashboards.
+- Include advanced analytics (e.g., time-based trends or geolocation data).
+- Build a browser extension for quick UTM link generation.
+- Support bulk UTM link creation from CSV uploads.
 
 ---
 
-Get ready to spread the love (or sarcasm) for all things dev! ❤️
+💡 **Get ready to simplify your UTM tracking workflows with this handy app!**
