@@ -113,4 +113,134 @@
         </section>
     </main>
 </body>
+
+<script>
+    interface UTMData {
+        baseUrl: string;
+        utmSource: string;
+        utmMedium: string;
+        utmCampaign: string;
+        utmTerm?: string;
+        utmContent?: string;
+    }
+
+    interface SavedLink {
+        baseUrl: string;
+        campaign: string;
+        source: string;
+        medium: string;
+        generatedLink: string;
+        timestamp: string;
+    }
+
+    // Get DOM elements with type assertions
+    const form = document.getElementById('utm-form') as HTMLFormElement;
+    const generatedLinkTextarea = document.getElementById('generated-link') as HTMLTextAreaElement;
+    const copyButton = document.getElementById('copy-button') as HTMLButtonElement;
+    
+    // Function to generate UTM link
+    function generateUTMLink(data: UTMData): string {
+        const url = new URL(data.baseUrl);
+        if (data.utmSource) url.searchParams.append('utm_source', data.utmSource);
+        if (data.utmMedium) url.searchParams.append('utm_medium', data.utmMedium);
+        if (data.utmCampaign) url.searchParams.append('utm_campaign', data.utmCampaign);
+        if (data.utmTerm) url.searchParams.append('utm_term', data.utmTerm);
+        if (data.utmContent) url.searchParams.append('utm_content', data.utmContent);
+        return url.toString();
+    }
+
+    // Function to save link to localStorage
+    function saveLink(data: UTMData, generatedLink: string): void {
+        const savedLinks = JSON.parse(localStorage.getItem('utmLinks') || '[]') as SavedLink[];
+        savedLinks.push({
+            baseUrl: data.baseUrl,
+            campaign: data.utmCampaign,
+            source: data.utmSource,
+            medium: data.utmMedium,
+            generatedLink,
+            timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('utmLinks', JSON.stringify(savedLinks));
+        updateSavedLinksTable();
+    }
+
+    // Function to update the saved links table
+    function updateSavedLinksTable(): void {
+        const savedLinks = JSON.parse(localStorage.getItem('utmLinks') || '[]') as SavedLink[];
+        const tbody = document.querySelector('tbody');
+        if (!tbody) return;
+        
+        tbody.innerHTML = savedLinks.map((link: SavedLink, index: number) => `
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 truncate max-w-xs">${link.baseUrl}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${link.campaign}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${link.source}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${link.medium}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 hover:underline truncate max-w-xs">
+                    <a href="${link.generatedLink}" title="${link.generatedLink}" target="_blank">
+                        ${link.generatedLink.substring(0, 50)}...
+                    </a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button class="text-red-600 hover:text-red-900" onclick="deleteLink(${index})">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // Function to delete a saved link
+    function deleteLink(index: number): void {
+        const savedLinks = JSON.parse(localStorage.getItem('utmLinks') || '[]') as SavedLink[];
+        savedLinks.splice(index, 1);
+        localStorage.setItem('utmLinks', JSON.stringify(savedLinks));
+        updateSavedLinksTable();
+    }
+
+    // Handle form submission
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData: UTMData = {
+                baseUrl: (document.getElementById('base-url') as HTMLInputElement).value,
+                utmSource: (document.getElementById('utm-source') as HTMLInputElement).value,
+                utmMedium: (document.getElementById('utm-medium') as HTMLInputElement).value,
+                utmCampaign: (document.getElementById('utm-campaign') as HTMLInputElement).value,
+                utmTerm: (document.getElementById('utm-term') as HTMLInputElement).value,
+                utmContent: (document.getElementById('utm-content') as HTMLInputElement).value
+            };
+
+            const generatedLink = generateUTMLink(formData);
+            if (generatedLinkTextarea) {
+                generatedLinkTextarea.value = generatedLink;
+            }
+            saveLink(formData, generatedLink);
+        });
+    }
+
+    // Handle copy button click
+    if (copyButton && generatedLinkTextarea) {
+        copyButton.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(generatedLinkTextarea.value);
+                const originalText = copyButton.textContent || 'Copy to Clipboard';
+                copyButton.textContent = 'Copied!';
+                copyButton.classList.add('bg-green-700');
+                setTimeout(() => {
+                    copyButton.textContent = originalText;
+                    copyButton.classList.remove('bg-green-700');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text:', err);
+            }
+        });
+    }
+
+    // Load saved links on page load
+    window.addEventListener('load', () => {
+        updateSavedLinksTable();
+    });
+
+    // Make deleteLink available globally
+    (window as any).deleteLink = deleteLink;
+</script>
 </html>
